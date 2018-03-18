@@ -28,6 +28,7 @@ $(function() {
         it('should feed url not empty', function () {
             for(var i=0,len=allFeeds.length;i<len;i++) {
                 expect(allFeeds[i].url).not.toBeNull();
+                expect(allFeeds[i].url.length).not.toBe(0);
             }
         });
 
@@ -37,6 +38,7 @@ $(function() {
         it('should feed name not empty', function () {
             for(var i=0,len=allFeeds.length;i<len;i++) {
                 expect(allFeeds[i].name).not.toBeNull();
+                expect(allFeeds[i].name.length).not.toBe(0);
             }
         });
     });
@@ -49,7 +51,7 @@ $(function() {
         * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
         */
        it('should menu is initially hidden', function () {
-           expect($('body').hasClass('menu-hidden')).toBeTruthy();
+           expect($('body').hasClass('menu-hidden')).toBe(true);
        });
 
        /*
@@ -60,9 +62,9 @@ $(function() {
        it('should menu change between hide and show when click menu icon', function () {
            var menuIcon = $('.menu-icon-link');
            menuIcon.click();
-           expect($('body').hasClass('menu-hidden')).toBeFalsy();
+           expect($('body').hasClass('menu-hidden')).toBe(false);
            menuIcon.click();
-           expect($('body').hasClass('menu-hidden')).toBeTruthy();
+           expect($('body').hasClass('menu-hidden')).toBe(true);
        });
 
    });
@@ -78,14 +80,11 @@ $(function() {
          * 和异步的 done() 函数。
          */
         beforeEach(function (done) {
-            loadFeed(0, function () {
-                done();
-            })
+            loadFeed(0, done);
         });
-        it('should have at least one feed', function (done) {
+        it('should have at least one feed', function () {
             var container = $('.feed');
             expect(container.children().length).toBeGreaterThan(0);
-            done();
         });
     });
 
@@ -101,22 +100,16 @@ $(function() {
 
         beforeEach(function (done) {
             loadFeed(1, function () {
-                content1 = container.html();
-                done();
+                content1 = container.text();
+                loadFeed(2, function () {
+                    content2 = container.html();
+                    done();
+                });
             });
         });
 
-        it('should have feeds when id=1', function (done) {
-            expect(content1).not.toBeNull();
-            loadFeed(2, function () {
-                content2 = container.html();
-                done();
-            });
-        });
-
-        it('should feed contents different between id=1 and id=2', function (done) {
+        it('should feed contents different between id=1 and id=2', function () {
             expect(content2).not.toEqual(content1);
-            done();
         });
     });
 
